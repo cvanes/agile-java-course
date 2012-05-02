@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 public class Account {
 
     private final String number;
@@ -6,11 +8,12 @@ public class Account {
 
     private boolean active = true;
 
-    private long balance = 0L;
+    private BigDecimal balance = new BigDecimal(0);
 
     public Account(String number, String customerName) {
         this.number = number;
         this.customerName = customerName;
+        balance = balance.setScale(2);
     }
 
     public String getNumber() {
@@ -28,7 +31,7 @@ public class Account {
         active = false;
     }
 
-    public long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
@@ -36,10 +39,16 @@ public class Account {
         return customerName;
     }
 
-	public void deposit(long amount) {
-		if (amount <= 0) {
+	public void deposit(BigDecimal amount) {
+		if (amount == null || lessThanOrEqualToZero(amount)) {
 			throw new IllegalArgumentException("You may not deposit negative or zero amounts");
 		}
-		balance += amount;
+		balance = balance.add(amount.setScale(2, BigDecimal.ROUND_DOWN));
+        balance = balance.setScale(2);
+	}
+	
+	private boolean lessThanOrEqualToZero(BigDecimal amount) {
+	    int result = BigDecimal.ZERO.compareTo(amount);
+	    return result >= 0;
 	}
 }

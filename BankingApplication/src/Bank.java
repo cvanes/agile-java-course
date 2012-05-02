@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,17 +21,15 @@ public class Bank {
         return newAccount;
     }
 
-	public static String getBalance(String accountNumber) {
-		long balance  = accounts.get(accountNumber).getBalance();
-		if (balance == 0) {
-			return "�0.00";
-		} else {
-			String s = "�" + String.valueOf(balance);
-			String balanceString = s.substring(0, s.length() -3) + "." + s.substring(s.length() - 2);
-			return balanceString;
-		}
+	public static BigDecimal getBalance(String accountNumber) {
+	    Account account = accounts.get(accountNumber);
+	    if (account == null) {
+	        throw new IllegalArgumentException("");
+	    }
+	    
+	    return account.getBalance();
 	}
-
+	    
     private static String nextAccountNumber() {
         if (lastAccountNumber == maxAccountNumber)
             throw new RuntimeException("Maximum account limit reached");
