@@ -15,9 +15,20 @@ public class BankGetBalanceTest {
         assertEquals(expected, balance);
     }
     
+    @Test
+    public void get_balance_returns_correct_balance_after_deposit() {
+        String accountNumber = Bank.createAccount("newCustomer").getNumber(); 
+        BigDecimal amount = new BigDecimal(10).setScale(2);
+        
+        Bank.deposit(accountNumber, amount);
+        
+        BigDecimal balance = Bank.getBalance(accountNumber);
+        assertEquals(amount, balance);
+    }
+    
     @Test(expected=AccountDoesNotExistException.class)
     public void throws_AccountDoesNotExistException_getting_balance_for_account_that_does_exist() {
-        Bank.getBalance("001");
+        Bank.getBalance("00100000");
     }
 
 }

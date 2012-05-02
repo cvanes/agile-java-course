@@ -53,4 +53,14 @@ public class Bank {
             throw new IllegalArgumentException("Invalid account number");
         }
     }
+
+    public static void deposit(String accountNumber, BigDecimal amount) {
+        validateAccountNumber(accountNumber);
+        Account account = accounts.get(accountNumber);
+        if (account == null) {
+            throw new AccountDoesNotExistException();
+        }
+        
+        account.deposit(amount);
+    }
 }
