@@ -1,16 +1,18 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Bank {
 
-    private static Map<String, Account> accounts = new HashMap<String, Account>();
+    private Map<String, Account> accounts = new HashMap<String, Account>();
 
-    private static int lastAccountNumber = 0;
+    private int lastAccountNumber = 0;
 
-    private static int maxAccountNumber = 999999999;
+    private int maxAccountNumber = 999999999;
 
-    public static Account createAccount(String name) {
+    public Account createAccount(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -21,22 +23,22 @@ public class Bank {
         return newAccount;
     }
 
-	public static BigDecimal getBalance(String accountNumber) {
+	public BigDecimal getBalance(String accountNumber) {
 	    Account account = accounts.get(accountNumber);
 	    if (account == null) {
 	        throw new AccountDoesNotExistException();
 	    }
-	    
+
 	    return account.getBalance();
 	}
-	    
-    private static String nextAccountNumber() {
+
+    private String nextAccountNumber() {
         if (lastAccountNumber == maxAccountNumber)
             throw new RuntimeException("Maximum account limit reached");
         return String.format("%08d", ++lastAccountNumber);
     }
 
-    public static void closeAccount(String accountNumber) {
+    public void closeAccount(String accountNumber) {
         validateAccountNumber(accountNumber);
         Account account = accounts.get(accountNumber);
         if (account == null) {
@@ -45,7 +47,7 @@ public class Bank {
         account.close();
     }
 
-    private static void validateAccountNumber(String accountNumber) {
+    private void validateAccountNumber(String accountNumber) {
         boolean valid = accountNumber != null &&
                 accountNumber.matches("[0-9]{8}");
 
@@ -54,13 +56,23 @@ public class Bank {
         }
     }
 
-    public static void deposit(String accountNumber, BigDecimal amount) {
+    public void deposit(String accountNumber, BigDecimal amount) {
         validateAccountNumber(accountNumber);
         Account account = accounts.get(accountNumber);
         if (account == null) {
             throw new AccountDoesNotExistException();
         }
-        
+
         account.deposit(amount);
+    }
+
+    public List<Account> getAllAccounts(String customerName) {
+        List<Account> accountList = new ArrayList<Account>();
+        for (Account account : accounts.values()) {
+            if (account.getCustomerName().equals(customerName)) {
+                accountList.add(account);
+            }
+        }
+        return accountList;
     }
 }
