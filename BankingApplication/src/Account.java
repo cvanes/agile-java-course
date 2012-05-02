@@ -39,16 +39,31 @@ public class Account {
         return customerName;
     }
 
-	public void deposit(BigDecimal amount) {
-		if (amount == null || lessThanOrEqualToZero(amount)) {
-			throw new IllegalArgumentException("You may not deposit negative or zero amounts");
-		}
-		balance = balance.add(amount.setScale(2, BigDecimal.ROUND_DOWN));
+    public void deposit(BigDecimal amount) {
+        if (amount == null || lessThanOrEqualToZero(amount)) {
+            throw new IllegalArgumentException(
+                    "You may not deposit negative or zero amounts");
+        }
+        balance = balance.add(amount.setScale(2, BigDecimal.ROUND_DOWN));
         balance = balance.setScale(2);
-	}
-	
-	private boolean lessThanOrEqualToZero(BigDecimal amount) {
-	    int result = BigDecimal.ZERO.compareTo(amount);
-	    return result >= 0;
-	}
+    }
+
+    public void withdraw(BigDecimal amount) {
+        if (amount == null || lessThanOrEqualToZero(amount)) {
+            throw new IllegalArgumentException(
+                    "You may not withdraw negative or zero amounts");
+        }
+
+        if (amount.compareTo(balance) == 1) {
+            throw new InsufficientFundsException();
+        }
+        
+        balance = balance.subtract(amount.setScale(2, BigDecimal.ROUND_DOWN));
+        balance = balance.setScale(2);
+    }
+
+    private boolean lessThanOrEqualToZero(BigDecimal amount) {
+        int result = BigDecimal.ZERO.compareTo(amount);
+        return result >= 0;
+    }
 }
