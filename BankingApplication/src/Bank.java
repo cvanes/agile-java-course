@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,14 @@ public class Bank {
         account.deposit(amount);
     }
 
-    public List<Account> getAllAccounts(String customerName) {
+    public List<Account> getCustomerAccounts(String customerName) {
+
+        if(customerName == null || customerName.isEmpty())
+        {
+            throw new IllegalArgumentException();
+
+        }
+
         List<Account> accountList = new ArrayList<Account>();
         for (Account account : accounts.values()) {
             if (account.getCustomerName().equals(customerName)) {
@@ -83,6 +91,32 @@ public class Bank {
             throw new AccountDoesNotExistException();
         }
 
-        account.withdraw(amount);        
+        account.withdraw(amount);
+    }
+
+    public Collection<Account> getAllAccounts() {
+        return accounts.values();
+    }
+
+    public List<Account> getOpenAccounts() {
+        return getAccounts(true);
+    }
+
+    public List<Account> getClosedAccounts() {
+        return getAccounts(false);
+    }
+
+    private List<Account> getAccounts(boolean active) {
+        List<Account> accountList = new ArrayList<Account>();
+        for (Account account : accounts.values()) {
+            if (active == account.isActive()) {
+                accountList.add(account);
+            }
+        }
+        return accountList;
+    }
+
+    public int getNumberOfAccounts() {
+        return getAllAccounts().size();
     }
 }
