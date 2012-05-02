@@ -6,11 +6,11 @@ import java.util.Map;
 
 public class Bank {
 
-    private Map<String, Account> accounts = new HashMap<String, Account>();
+    private final Map<String, Account> accounts = new HashMap<String, Account>();
 
     private int lastAccountNumber = 0;
 
-    private int maxAccountNumber = 999999999;
+    private final int maxAccountNumber = 999999999;
 
     public Account createAccount(String name) {
         if (name == null || name.isEmpty()) {
@@ -74,5 +74,15 @@ public class Bank {
             }
         }
         return accountList;
+    }
+
+    public void withdraw(String accountNumber, BigDecimal amount) {
+        validateAccountNumber(accountNumber);
+        Account account = accounts.get(accountNumber);
+        if (account == null) {
+            throw new AccountDoesNotExistException();
+        }
+
+        account.withdraw(amount);        
     }
 }
