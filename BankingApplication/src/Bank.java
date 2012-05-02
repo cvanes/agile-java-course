@@ -24,14 +24,14 @@ public class Bank {
         return newAccount;
     }
 
-	public BigDecimal getBalance(String accountNumber) {
-	    Account account = accounts.get(accountNumber);
-	    if (account == null) {
-	        throw new AccountDoesNotExistException();
-	    }
+    public BigDecimal getBalance(String accountNumber) {
+        Account account = accounts.get(accountNumber);
+        if (account == null) {
+            throw new AccountDoesNotExistException();
+        }
 
-	    return account.getBalance();
-	}
+        return account.getBalance();
+    }
 
     private String nextAccountNumber() {
         if (lastAccountNumber == maxAccountNumber)
@@ -49,8 +49,8 @@ public class Bank {
     }
 
     private void validateAccountNumber(String accountNumber) {
-        boolean valid = accountNumber != null &&
-                accountNumber.matches("[0-9]{8}");
+        boolean valid = accountNumber != null
+                && accountNumber.matches("[0-9]{8}");
 
         if (!valid) {
             throw new IllegalArgumentException("Invalid account number");
@@ -69,8 +69,7 @@ public class Bank {
 
     public List<Account> getCustomerAccounts(String customerName) {
 
-        if(customerName == null || customerName.isEmpty())
-        {
+        if (customerName == null || customerName.isEmpty()) {
             throw new IllegalArgumentException();
 
         }
