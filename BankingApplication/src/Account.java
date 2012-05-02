@@ -21,6 +21,10 @@ public class Account {
         return active;
     }
 
+    public void close() {
+        active = false;
+    }
+
     public long getBalance() {
         return balance;
     }

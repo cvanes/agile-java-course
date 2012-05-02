@@ -7,24 +7,37 @@ public class Bank {
 
     private static int lastAccountNumber = 0;
 
-    public static String createAccount(String name) {
+    private static int maxAccountNumber = 999999999;
+
+    public static Account createAccount(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         String accountNumber = nextAccountNumber();
-        accounts.put(accountNumber, new Account(accountNumber, name));
-        return accountNumber;
+        Account newAccount = new Account(accountNumber, name);
+        accounts.put(accountNumber, newAccount);
+        return newAccount;
     }
 
 	public static String getBalance(String accountNumber) {
 		long balance  = accounts.get(accountNumber).getBalance();
 		if (balance == 0) {
-			return "£0.00";
+			return "ï¿½0.00";
 		} else {
-			String s = "£" + String.valueOf(balance);
+			String s = "ï¿½" + String.valueOf(balance);
 			String balanceString = s.substring(0, s.length() -3) + "." + s.substring(s.length() - 2);
 			return balanceString;
 		}
 	}
 
-	private static String nextAccountNumber() {
+    private static String nextAccountNumber() {
+        if (lastAccountNumber == maxAccountNumber)
+            throw new RuntimeException("Maximum account limit reached");
         return String.format("%08d", ++lastAccountNumber);
+    }
+
+    public static void closeAccount(String accountNumber) {
+        accounts.get(accountNumber).close();
     }
 }
