@@ -2,8 +2,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 
 public class BankTest {
@@ -18,19 +16,6 @@ public class BankTest {
         Account account = Bank.createAccount("newCustomer");
         assertTrue(account.isActive());
     }
-
-	@Test
-	public void get_balance_returns_account_balance_of_zero_for_new_account() {
-	    String accountNumber = Bank.createAccount("newCustomer").getNumber();		
-		BigDecimal balance = Bank.getBalance(accountNumber);
-		BigDecimal expected = new BigDecimal(0).setScale(2);
-		assertEquals(expected, balance);
-	}
-	
-	@Test(expected=AccountDoesNotExistException.class)
-	public void throws_AccountDoesNotExistException_getting_balance_for_account_that_does_exist() {
-	    Bank.getBalance("001");
-	}
 
     @Test(expected=IllegalArgumentException.class)
     public void account_creation_with_null_name_fails() throws Exception {
