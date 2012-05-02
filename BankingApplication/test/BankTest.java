@@ -27,9 +27,9 @@ public class BankTest {
 		assertEquals(expected, balance);
 	}
 	
-	@Test
+	@Test(expected=AccountDoesNotExistException.class)
 	public void throws_AccountDoesNotExistException_getting_balance_for_account_that_does_exist() {
-	    
+	    Bank.getBalance("001");
 	}
 
     @Test(expected=IllegalArgumentException.class)
@@ -56,7 +56,7 @@ public class BankTest {
         assertFalse(account.isActive());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=AccountDoesNotExistException.class)
     public void closing_non_existent_account_throws_exception() throws Exception {
         Bank.closeAccount("00000138");
     }

@@ -24,7 +24,7 @@ public class Bank {
 	public static BigDecimal getBalance(String accountNumber) {
 	    Account account = accounts.get(accountNumber);
 	    if (account == null) {
-	        throw new IllegalArgumentException("");
+	        throw new AccountDoesNotExistException();
 	    }
 	    
 	    return account.getBalance();
@@ -40,7 +40,7 @@ public class Bank {
         validateAccountNumber(accountNumber);
         Account account = accounts.get(accountNumber);
         if (account == null) {
-            throw new IllegalArgumentException("No such account");
+            throw new AccountDoesNotExistException();
         }
         account.close();
     }
