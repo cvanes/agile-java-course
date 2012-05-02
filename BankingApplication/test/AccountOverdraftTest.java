@@ -48,17 +48,17 @@ public class AccountOverdraftTest {
         assertEquals(expected, account.getBalance());
     }
     
-    @Test(expected = OverdraftInsufficientException.class)
-    public void throws_OverdraftInsufficientException_when_debt_exceeds_limit() {
+    @Test(expected =IllegalStateException.class)
+    public void throws_IllegalStateException_when_closing_overdrawn_account() {
         Account account = new Account("99887766", "mr jones");
         BigDecimal limit = new BigDecimal(100).setScale(2);
         account.setOverdraftLimit(limit);
         
         BigDecimal withdrawalAmount = new BigDecimal(50).setScale(2);
         account.withdraw(withdrawalAmount);
-
-        BigDecimal newLimit = new BigDecimal(40).setScale(2);
-        account.setOverdraftLimit(newLimit);
+        account.close();
     }
+    
+ 
 
 }

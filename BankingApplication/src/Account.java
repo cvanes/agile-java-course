@@ -34,6 +34,10 @@ public class Account {
         if (!active) {
             throw new IllegalStateException("Account already closed");
         }
+        
+        if (lessThanZero(balance)) {
+            throw new IllegalStateException("Account is overdrawn, you may not close it.");
+        }
         active = false;
     }
 
