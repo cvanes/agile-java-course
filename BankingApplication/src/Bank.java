@@ -38,6 +38,20 @@ public class Bank {
     }
 
     public static void closeAccount(String accountNumber) {
-        accounts.get(accountNumber).close();
+        validateAccountNumber(accountNumber);
+        Account account = accounts.get(accountNumber);
+        if (account == null) {
+            throw new IllegalArgumentException("No such account");
+        }
+        account.close();
+    }
+
+    private static void validateAccountNumber(String accountNumber) {
+        boolean valid = accountNumber != null &&
+                accountNumber.matches("[0-9]{8}");
+
+        if (!valid) {
+            throw new IllegalArgumentException("Invalid account number");
+        }
     }
 }

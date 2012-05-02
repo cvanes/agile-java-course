@@ -48,4 +48,26 @@ public class BankTest {
         Bank.closeAccount(account.getNumber());
         assertFalse(account.isActive());
     }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void closing_non_existent_account_throws_exception() throws Exception {
+        Bank.closeAccount("00000138");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void closing_invalid_account_number_throws_exception() throws Exception {
+        Bank.closeAccount("123");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void closing_null_account_throws_exception() throws Exception {
+        Bank.closeAccount(null);
+    }
+
+    @Test(expected=IllegalStateException.class)
+    public void closing_closed_account_throws_exception() throws Exception {
+        Account account = Bank.createAccount("newCustomer");
+        Bank.closeAccount(account.getNumber());
+        Bank.closeAccount(account.getNumber());
+    }
 }

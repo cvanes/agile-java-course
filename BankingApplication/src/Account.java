@@ -22,6 +22,9 @@ public class Account {
     }
 
     public void close() {
+        if (!active) {
+            throw new IllegalStateException("Account already closed");
+        }
         active = false;
     }
 
