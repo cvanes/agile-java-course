@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -68,14 +69,12 @@ public class BankQueryTest {
 
     @Test
     public void returns_empty_list_when_no_accounts() throws Exception {
-
         Collection<Account> accounts = bank.getAllAccounts();
         assertEquals(accounts.size(), 0);
     }
 
     @Test
     public void returns_none_for_number_of_accounts_when_no_accounts() throws Exception {
-
         int  numberofaccounts= bank.getNumberOfAccounts();
         assertEquals(numberofaccounts, 0);
     }
@@ -123,4 +122,47 @@ public class BankQueryTest {
         List<Account> accounts = bank.getClosedAccounts();
         assertEquals(accounts.size(), 1);
     }
+
+    @Test
+    public void returns_single_account_for_customer() throws Exception {
+        bank.createAccount("customer");
+        bank.createAccount("customer");
+        Account newAccount = bank.createAccount("customer");
+        Account account = bank.getAccount(newAccount.getNumber());
+        assertEquals(account.getNumber(), newAccount.getNumber());
+        assertEquals(account.getCustomerName(), "customer");
+    }
+
+    @Test(expected = AccountDoesNotExistException.class)
+    public void throws_exception_when_getting_null_existent_account() throws Exception {
+        bank.getAccount(null);
+    }
+
+    @Test(expected = AccountDoesNotExistException.class)
+    public void throws_exception_when_getting_non_existent_account() throws Exception {
+        bank.getAccount("123");
+    }
+
+    @Test
+    public void returns_none_if_no_accounts_overdrawn() throws Exception {
+        bank.createAccount("customer");
+        bank.createAccount("customer");
+
+        assertEquals(0, bank.getOverdrawnAccounts().size());
+    }
+
+    @Test
+    public void returns_number_of_accounts_overdrawn() throws Exception {
+        bank.createAccount("customer");
+        Account acc2 =  bank.createAccount("customer");
+        bank.setOverdraftLimit(acc2.getNumber(), new BigDecimal(100));
+        bank.withdraw(acc2.getNumber(), new BigDecimal(1));
+        Account acc3 = bank.createAccount("customer");
+        bank.setOverdraftLimit(acc3.getNumber(), new BigDecimal(100));
+        bank.withdraw(acc3.getNumber(), new BigDecimal(1));
+
+        assertEquals(2, bank.getOverdrawnAccounts().size());
+    }
+
+
 }

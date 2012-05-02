@@ -115,7 +115,30 @@ public class Bank {
         return accountList;
     }
 
+    public List<Account> getOverdrawnAccounts() {
+        List<Account> accountList = new ArrayList<Account>();
+        for (Account account : accounts.values()) {
+            if (account.isOverdrawn()) {
+                accountList.add(account);
+            }
+        }
+        return accountList;
+    }
+
     public int getNumberOfAccounts() {
         return getAllAccounts().size();
+    }
+
+    public Account getAccount(String accountNumber) {
+        Account account = accounts.get(accountNumber);
+        if (account == null) {
+            throw new AccountDoesNotExistException();
+        }
+        return account;
+    }
+
+    public void setOverdraftLimit(String accountNumber,BigDecimal overdraftLimit) {
+        Account acc = getAccount(accountNumber);
+        acc.setOverdraftLimit(overdraftLimit);
     }
 }

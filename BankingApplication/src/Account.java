@@ -9,7 +9,7 @@ public class Account {
     private boolean active = true;
 
     private BigDecimal balance = new BigDecimal(0);
-    
+
     private BigDecimal overdraftLimit = new BigDecimal(0);
 
     public Account(String number, String customerName) {
@@ -21,9 +21,13 @@ public class Account {
     public String getNumber() {
         return number;
     }
-    
+
     public BigDecimal getOverdraftLimit() {
         return overdraftLimit;
+    }
+
+    public boolean isOverdrawn() {
+       return lessThanZero(balance);
     }
 
     public boolean isActive() {
@@ -64,34 +68,34 @@ public class Account {
         if (amount.compareTo(potentialBalance) == 1) {
             throw new InsufficientFundsException();
         }
-        
+
         balance = balance.subtract(amount.setScale(2, BigDecimal.ROUND_DOWN));
         balance = balance.setScale(2);
     }
-    
+
     public void setOverdraftLimit(BigDecimal limit) {
         if (limit == null || lessThanZero(limit)) {
             throw new IllegalArgumentException(
                     "You may not set a negative or null overdraft limit.");
         }
-        
+
         if (lessThanZero(balance)) {
             BigDecimal absoluteBalance = balance.abs();
             if (limit.compareTo(absoluteBalance) == -1) {
                 throw new OverdraftInsufficientException();
-            } 
+            }
         }
-        
+
         overdraftLimit = limit;
     }
-    
+
     private boolean lessThanOrEqualToZero(BigDecimal amount) {
         int result = BigDecimal.ZERO.compareTo(amount);
         return result >= 0;
     }
-    
+
     private boolean lessThanZero(BigDecimal amount) {
         int result = BigDecimal.ZERO.compareTo(amount);
-        return result == 1;
+        return result > 0;
     }
 }
