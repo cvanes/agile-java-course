@@ -28,4 +28,11 @@ public class Account {
     public String getCustomerName() {
         return customerName;
     }
+
+	public void deposit(long amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("You may not deposit negative or zero amounts");
+		}
+		balance += amount;
+	}
 }
