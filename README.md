@@ -1,4 +1,1 @@
-agile-java-course
-=================
-
-Shared workspace for Agile Java course
+Source code for an agile java training course
